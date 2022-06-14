@@ -1,15 +1,15 @@
-// import com.kotlinbasics.models.Car
-import kotlin.random.Random
+package com.kotlinbasics.models
 
-fun main() {
-    val myMeal: Meal = Meal("fried chicken", "predator")
-    val humanBeeing: Human = Human("Aleksandr", "mammal", 75.0)
-    humanBeeing.move()
-    humanBeeing.consume(myMeal)
-    humanBeeing.breath()
-    humanBeeing.greet()
+// realisation of inheritance from interface and abstract class
+// fun main() {
+//     val myMeal: Meal = Meal("fried chicken", "predator")
+//     val humanBeeing: Human = Human("Aleksandr", "mammal", 75.0)
+//     humanBeeing.move()
+//     humanBeeing.consume(myMeal)
+//     humanBeeing.breath()
+//     humanBeeing.greet()
 
-}
+// }
 // moveable obj abstract interface
 interface MoveableObject{ 
     abstract fun move()
@@ -56,4 +56,3 @@ open class Human(name: String, origin: String, weight: Double, override var diet
             println("Met a human: he's name is ${name}, he belongs to ${origin}, his weight: ${weight}, he's ${diet}")
         }
     }
-
