@@ -12,8 +12,8 @@ open class Car(val brand: String, val model: String, var owner: String? = null, 
     
     // amount of range
 
-    var range: Double = 0.0
-    fun extendRange(amount: Double){
+    open var range: Double = 0.0
+    open fun extendRange(amount: Double){
         if(tankCapacity != null || tankCapacity!! > 0 || amount > 0){
             // charging gas
             if(amount <= tankCapacity!!){
@@ -31,14 +31,14 @@ open class Car(val brand: String, val model: String, var owner: String? = null, 
     }
 
     // drive possibilities
-    fun drive(distance: Double? = null): Boolean {
+    open fun drive(distance: Double? = null): Boolean {
         var driveDistance: Double = distance ?: 0.0
         var droveDistance: Double = 0.0
         if (driveDistance < 0.0) 
             driveDistance = 0.0  
         while (driveDistance != 0.0) {
             if (range - 5 <= 0) {
-                println("Insufficient gas, current distance = ${driveDistance}") 
+                println("Insufficient gas, remaining distance = ${driveDistance}") 
                 break
             }
             if (driveDistance - 5 < 0) {
@@ -70,7 +70,59 @@ open class Car(val brand: String, val model: String, var owner: String? = null, 
 }
 
 // Sub Class Childe class or Derived Class inherrited Class
-class ElectricCar(brand: String, model: String, owner: String? = null, expluatationAge: String? = null, batteryLife: Double) 
+class ElectricCar(brand: String, model: String, owner: String? = null, expluatationAge: String? = null, _batteryLife: Double? = null) 
     : Car(brand, model, owner, expluatationAge) {
 
+    var batteryLife = _batteryLife ?: 0.0
+    override var range: Double = batteryLife * 5
+
+    override fun extendRange(amount: Double){
+        if(batteryLife != null || batteryLife > 0 || amount > 0){
+            // charging gas
+            if(amount <= range){
+                range += amount
+                println("you have filled your ${model} with ${amount} of charge")
+                // if requested too many gas
+            }else if (amount > range){
+                val lastRangeTobatteryLife: Double = ((batteryLife * 5) - range)
+                range += lastRangeTobatteryLife
+                println("You ${brand}-${model} is unable to have ${amount} of charge, we filled ${lastRangeTobatteryLife} of charge, the maximum capacity is ${batteryLife * 5} of charge")
+            }
+        }else{
+            println("You car has no tank or you have requested negative number")
+        }
+    }
+
+    override fun drive(distance: Double?): Boolean {
+        var driveDistance: Double = distance ?: 0.0
+        var droveDistance: Double = 0.0
+        if (driveDistance < 0.0) 
+            driveDistance = 0.0  
+        while (driveDistance != 0.0) {
+            if (range - 5 <= 0) {
+                println("Insufficient charge, current distance = ${driveDistance}") 
+                break
+            }
+            if (driveDistance - 5 < 0) {
+                range -= driveDistance
+                println("Drove ${driveDistance}KM, current charge = ${range}")
+                driveDistance = 0.0
+                break
+            } 
+            else{
+                driveDistance -= 5
+                droveDistance += 5
+                range -= 5 
+                println("Drove 5KM, passed distance is ${droveDistance}KM, current charge  = ${range}")
+            }
+        }
+        if(driveDistance == 0.0){
+            println("Drove has been completed, the remaining charge = ${range}")
+            return true
+        }else{
+            println("Drove has ended, the remaining distance = ${driveDistance}KM, passed distance is ${droveDistance}KM")
+            println("The remaining charge = ${range}, which is not enought to pass ${driveDistance}KM,\nit's recommended to visit charging station")
+            return false
+        }
+    }
 }
